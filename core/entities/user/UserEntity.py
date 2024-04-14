@@ -1,6 +1,6 @@
-from .. import db
+from ... import db
 
-class UserEntity(db.model):
+class UserEntity(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     profile_photo = db.Column(db.Text)
     user_name = db.Column(db.Text)

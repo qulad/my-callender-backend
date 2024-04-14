@@ -1,6 +1,6 @@
-from .. import db
+from ... import db
 
-class InvitesEntity(db.model):
+class InvitesEntity(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     event_id = db.Column(db.Text)
     status = db.Column(db.Integer) # enum

@@ -1,6 +1,6 @@
-from .. import db
+from ... import db
 
-class FriendsEntity(db.model):
+class FriendsEntity(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     accepted = db.Column(db.Boolean)
     requester_user_name = db.Column(db.Text)
