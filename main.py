@@ -1,6 +1,6 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from my_calender import main_blueprint
+from application import main_blueprint
 import sqlite3
 
 app = Flask(__name__)
