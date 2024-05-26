@@ -1,6 +1,9 @@
 {
 "isGitignoreExtActive": true,
 "cSpell.words": [
+    "dtos",
+    "endregion",
+    "jsonify",
     "sqlalchemy"
 ],
 }
