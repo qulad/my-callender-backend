@@ -4,11 +4,13 @@ from typing import List
 from uuid import UUID
 import uuid
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 import re
 
 app = Flask(__name__)
+CORS(app)
 
 app.config["JWT_SECRET_KEY"] = "my_secret_key"
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"
@@ -359,10 +361,11 @@ def register():
     user_repository = UserRepository()
     email = request.json.get("email", None)
     username = request.json.get("userName", None)
+    full_name = request.json.get("fullName", None)
     password = request.json.get("password", None)
     password2 = request.json.get("password2", None)
     
-    if not email or not username or not password or not password2:
+    if not email or not username or not full_name or not password or not password2:
         return jsonify({}), 400
     
     regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
@@ -384,7 +387,7 @@ def register():
         id=0,
         profile_photo="",
         user_name=username,
-        full_name="",
+        full_name=full_name,
         biography="",
         friends=[],
         received_friend_requests=[],
