@@ -103,6 +103,46 @@ class BlockedRepository:
         return blocked
     
 class EventRepository:
+    def get_events_with_limit(self, limit : int) -> List[EventDto]:
+        event_entities = EventEntity.query.limit(limit).all()
+        
+        if event_entities is None:
+            return []
+        
+        events = []
+        
+        event_entity : EventEntity
+        for event_entity in event_entities:
+            event = EventDto(
+                id=event_entity.id,
+                created_by=event_entity.creator_user_name,
+                location=event_entity.location,
+                date_time=event_entity.date_time,
+                description=event_entity.description,
+                invited_user_names=[],
+                accepted_user_names=[],
+                rejected_user_names=[]
+            )
+            
+            invites_entities = InvitesEntity.query.filter_by(event_id=event_entity.id).all()
+            
+            if invites_entities is None:
+                events.append(event)
+                continue
+            
+            invite : InvitesEntity
+            for invite in invites_entities:
+                if invite.status == 0:
+                    event.invited_user_names.append(invite.responder_user_name)
+                elif invite.status == 1:
+                    event.accepted_user_names.append(invite.responder_user_name)
+                elif invite.status == 2:
+                    event.rejected_user_names.append(invite.responder_user_name)
+            
+            events.append(event)
+        
+        return events
+
     def reject_event_invite(self, event_id : uuid, user_name : str):
         invite_entity = InvitesEntity.query.filter_by(
             event_id=event_id,
@@ -492,6 +532,16 @@ def get_event_details(event_id):
     event = event_repository.get_event_from_event_id(event_id)
     
     return jsonify(event), 200
+
+@app.get("/event")
+@jwt_required()
+def get_events_with_limit():
+    limit = 20
+    event_repository = EventRepository()
+    
+    events = event_repository.get_events_with_limit(limit)
+    
+    return jsonify(events), 200
 
 @app.post("/event")
 @jwt_required()
