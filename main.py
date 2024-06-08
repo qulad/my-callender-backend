@@ -171,9 +171,10 @@ class EventRepository:
 
     def add_event(self, created_by: str, invites : List[str], location : str, date : datetime, description : str) -> uuid:
         event_entity = EventEntity(
+            id=str(uuid.uuid4()),
             location=location,
             creator_user_name=created_by,
-            date_time=date,
+            date_time=datetime.strptime(date, '%Y-%m-%dT%H:%M'),
             description=description)
         
         db.session.add(event_entity)
