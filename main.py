@@ -522,7 +522,7 @@ def user_blocked():
 #endregion
 
 #region event
-@app.get("/event/<uuid:event_id>")
+@app.get("/event/<string:event_id>")
 @jwt_required()
 def get_event_details(event_id):
     event_repository = EventRepository()
@@ -561,7 +561,7 @@ def add_event():
     
     return jsonify(event_id=event_id), 200
 
-@app.put("/event/<uuid:event_id>")
+@app.put("/event/<string:event_id>")
 @jwt_required()
 def accept_event_invite(event_id):
     event_repository = EventRepository()
