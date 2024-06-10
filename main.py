@@ -405,8 +405,9 @@ def register():
     full_name = request.json.get("fullName", None)
     password = request.json.get("password", None)
     password2 = request.json.get("password2", None)
+    profile_photo = request.json.get("imgUrl", None)
     
-    if not email or not username or not full_name or not password or not password2:
+    if not email or not username or not full_name or not password or not password2 or not profile_photo:
         return jsonify({}), 400
     
     regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
@@ -426,7 +427,7 @@ def register():
     
     user = UserDto(
         id=0,
-        profile_photo="",
+        profile_photo=profile_photo,
         user_name=username,
         full_name=full_name,
         biography="",
